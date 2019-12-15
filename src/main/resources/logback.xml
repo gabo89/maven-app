@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <appender name="stash" class="net.logstash.logback.appender.LogstashUdpSocketAppender">
+    <host>192.168.50.23</host>
+    <!-- port is optional (default value shown) -->
+    <port>5000</port>
+    <!-- layout is required -->
+    <layout class="net.logstash.logback.layout.LogstashLayout"/>
+  </appender>
+  <root level="all">
+    <appender-ref ref="stash" />
+  </root>
+</configuration>
