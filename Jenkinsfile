@@ -22,7 +22,7 @@ pipeline {
       	stage('Deliver') {
             steps {
                 echo 'starting app....'
-		sh 'deliver.sh'
+		sh './deliver.sh'
             }
         }
     }
