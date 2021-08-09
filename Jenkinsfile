@@ -1,33 +1,39 @@
-pipeline {
-   agent {
-        docker {
-            image 'maven:3-alpine' 
-            args '-v /root/.m2:/root/.m2' 
-        }
-    }
+def podTemplate = """
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+  - name: maven
+    image: maven:3.8.1-jdk-8
+    command:
+    - sleep
+    args:
+    - infinity
+"""
 
+
+pipeline {
+    agent none
     stages {
-        stage('Build') {
-            steps {
-                echo 'Building..'
-		sh 'mvn -B -DskipTests clean package'
+        stage ('maven') {
+            agent { 
+                kubernetes {
+                    yaml podTemplate 
+                    defaultContainer 'maven'
+	            podRetention 'always()'
+                 } 
             }
-        }
-        stage('Test') {
-            steps {
-                echo 'Testing..'
-		sh 'mvn test'
-            }	
-	    post {
-                always {
-                    junit 'target/surefire-reports/*.xml'
+            stages {
+                stage('Nested 1') {                  
+                    steps {
+                        sh "touch Nested1 && mvn -version"
+                    }
                 }
-            }
-        }
-      	stage('Deliver') {
-            steps {
-                echo 'starting app....'
-		sh './deliver.sh'
+                stage('Nested 2') {                  
+                    steps {
+                        sh "mvn -version 2 && touch Nested2 "
+                    }
+                }
             }
         }
     }
