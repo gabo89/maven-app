@@ -9,6 +9,10 @@ spec:
     - sleep
     args:
     - infinity
+    securityContext:
+      fsGroup: 1000
+      runAsGroup: 1000
+      runAsUser: 1000
 """
 
 
