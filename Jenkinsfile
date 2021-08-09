@@ -20,7 +20,7 @@ pipeline {
                 kubernetes {
                     yaml podTemplate 
                     defaultContainer 'maven'
-	            podRetention 'always()'
+	            podRetention always()
                  } 
             }
             stages {
